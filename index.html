@@ -55,7 +55,12 @@
         .file-input-label { display: block; padding: 10px; background: #f8faff; border: 2px dashed #0033cc; border-radius: 6px; text-align: center; cursor: pointer; font-weight: 600; color: #0033cc; transition: all 0.3s; }
         .file-input-label:hover { background: #e3f2fd; }
         .file-name { font-size: 12px; color: #666; margin-top: 5px; }
-        .preview-foto { width: 100%; max-height: 150px; border-radius: 6px; margin-top: 10px; display: none; }
+        .preview-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
+        .preview-foto { width: 100%; height: 100px; border-radius: 6px; object-fit: cover; border: 2px solid #ddd; position: relative; }
+        .preview-wrapper { position: relative; }
+        .btn-remove-foto { position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; padding: 0; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .btn-remove-foto:hover { background: #cc0000; }
+        .foto-count { font-size: 12px; color: #666; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -208,17 +213,15 @@
                 </div>
             </div>
 
-            <!-- SEÇÃO 6: FOTO -->
+            <!-- SEÇÃO 6: FOTOS MÚLTIPLAS - CORRIGIDO -->
             <div class="section">
-                <div class="section-title">📸 Foto do Cliente (Opcional)</div>
+                <div class="section-title">📸 Fotos do Cliente (Até 10 fotos - Opcional)</div>
                 <div class="form-group">
-                    <label for="fotoPNG">Selecione uma foto</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="fotoPNG" accept="image/*">
-                        <label for="fotoPNG" class="file-input-label">📷 Clique para selecionar foto</label>
-                        <div class="file-name" id="fotoNomearquivo"></div>
-                        <img id="fotoPreview" class="preview-foto" alt="Preview">
-                    </div>
+                    <label for="inputFotos">Selecione até 10 fotos:</label>
+                    <input type="file" id="inputFotos" accept="image/*" multiple>
+                    <p style="margin-top: 8px; font-size: 12px; color: #666;">💡 Dica: Segure Ctrl e clique em múltiplas fotos para selecionar várias de uma vez</p>
+                    <div class="foto-count" id="fotoContador"></div>
+                    <div class="preview-container" id="previewContainer"></div>
                 </div>
             </div>
 
@@ -240,6 +243,8 @@
 </div>
 
 <script>
+console.log('✅ Script iniciado');
+
 // ===== GRADE DE DIAS =====
 const daysGrid = document.getElementById('daysGrid');
 const vencimentoDia = document.getElementById('vencimentoDia');
@@ -258,23 +263,76 @@ for (let i = 1; i <= 30; i++) {
     daysGrid.appendChild(button);
 }
 
-// ===== FOTO =====
-const fotoPNG = document.getElementById('fotoPNG');
-const fotoNomearquivo = document.getElementById('fotoNomearquivo');
-const fotoPreview = document.getElementById('fotoPreview');
+// ===== MÚLTIPLAS FOTOS - CORRIGIDO =====
+const inputFotos = document.getElementById('inputFotos');
+const previewContainer = document.getElementById('previewContainer');
+const fotoContador = document.getElementById('fotoContador');
+let fotosArray = [];
 
-fotoPNG.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        fotoNomearquivo.textContent = '✅ ' + file.name;
+console.log('Input de fotos:', inputFotos);
+console.log('Atributo multiple:', inputFotos.getAttribute('multiple'));
+
+inputFotos.addEventListener('change', function(e) {
+    console.log('Evento change disparado');
+    const files = e.target.files;
+    console.log('Arquivos selecionados:', files.length);
+    
+    if (files.length > 10) {
+        alert('⚠️ Máximo de 10 fotos! Você selecionou ' + files.length);
+        return;
+    }
+    
+    fotosArray = [];
+    previewContainer.innerHTML = '';
+    let fotosCarregadas = 0;
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        console.log('Processando arquivo:', file.name);
         const reader = new FileReader();
+        
         reader.onload = function(event) {
-            fotoPreview.src = event.target.result;
-            fotoPreview.style.display = 'block';
+            const base64 = event.target.result;
+            fotosArray.push(base64);
+            fotosCarregadas++;
+            
+            console.log('Foto ' + fotosCarregadas + ' carregada:', file.name);
+            
+            // Criar preview
+            const wrapper = document.createElement('div');
+            wrapper.className = 'preview-wrapper';
+            
+            const img = document.createElement('img');
+            img.className = 'preview-foto';
+            img.src = base64;
+            
+            const btnRemove = document.createElement('button');
+            btnRemove.className = 'btn-remove-foto';
+            btnRemove.textContent = '×';
+            btnRemove.type = 'button';
+            btnRemove.addEventListener('click', (e) => {
+                e.preventDefault();
+                wrapper.remove();
+                fotosArray = fotosArray.filter((_, idx) => idx !== fotosArray.indexOf(base64));
+                atualizarContador();
+            });
+            
+            wrapper.appendChild(img);
+            wrapper.appendChild(btnRemove);
+            previewContainer.appendChild(wrapper);
+            
+            atualizarContador();
         };
+        
         reader.readAsDataURL(file);
     }
 });
+
+function atualizarContador() {
+    const count = previewContainer.children.length;
+    fotoContador.textContent = count > 0 ? `📷 ${count} foto(s) selecionada(s)` : '';
+    console.log('Contador atualizado:', count);
+}
 
 // ===== ENVIO =====
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx0l1hsaMhW9NBtjuz7jCrZMEnU1i3PADoEMRgZvZAArjJ2SjM_NG8Rib4L_27dbEUQmA/exec';
@@ -310,102 +368,78 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             adicionaisList.push(document.getElementById('adicional2').value);
         }
         
-        let fotoBase64 = '';
-        if (fotoPNG.files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = async function() {
-                fotoBase64 = reader.result;
-                enviarDados(adicionaisList, fotoBase64);
-            };
-            reader.readAsDataURL(fotoPNG.files[0]);
-        } else {
-            enviarDados(adicionaisList, '');
-        }
+        // CAPTURA EXATA DOS CAMPOS
+        const suaFilialValue = document.getElementById('suaFilial').value;
+        const seuNomeValue = document.getElementById('seuNome').value;
+        const seuTelefoneValue = document.getElementById('seuTelefone').value;
+        const clienteNomeValue = document.getElementById('clienteNome').value;
+        const clienteCPFValue = document.getElementById('clienteCPF').value;
+        const clienteTelefoneValue = document.getElementById('clienteTelefone').value;
+        const clienteEmailValue = document.getElementById('clienteEmail').value;
+        const clienteEnderecoValue = document.getElementById('clienteEndereco').value;
+        const clienteBairroValue = document.getElementById('clienteBairro').value;
+        const clienteCidadeValue = document.getElementById('clienteCidade').value;
+        const planoValue = document.querySelector('input[name="planoSelecionado"]:checked').value;
+        const vencimentoValue = document.getElementById('vencimentoDia').value;
+        const obsValue = document.getElementById('obsTexto').value || 'Sem observações';
 
-        async function enviarDados(adicionaisList, fotoBase64) {
-            // CAPTURA EXATA DOS CAMPOS
-            const suaFilialValue = document.getElementById('suaFilial').value;
-            const seuNomeValue = document.getElementById('seuNome').value;
-            const seuTelefoneValue = document.getElementById('seuTelefone').value;
-            const clienteNomeValue = document.getElementById('clienteNome').value;
-            const clienteCPFValue = document.getElementById('clienteCPF').value;
-            const clienteTelefoneValue = document.getElementById('clienteTelefone').value;
-            const clienteEmailValue = document.getElementById('clienteEmail').value;
-            const clienteEnderecoValue = document.getElementById('clienteEndereco').value;
-            const clienteBairroValue = document.getElementById('clienteBairro').value;
-            const clienteCidadeValue = document.getElementById('clienteCidade').value;
-            const planoValue = document.querySelector('input[name="planoSelecionado"]:checked').value;
-            const vencimentoValue = document.getElementById('vencimentoDia').value;
-            const obsValue = document.getElementById('obsTexto').value || 'Sem observações';
+        const adicionaisStr = adicionaisList.length > 0 ? adicionaisList.join(' | ') : 'Nenhum';
 
-            const adicionaisStr = adicionaisList.length > 0 ? adicionaisList.join(' | ') : 'Nenhum';
+        console.log('===== ENVIANDO INDICAÇÃO =====');
+        console.log('Cliente:', clienteNomeValue);
+        console.log('Fotos:', fotosArray.length);
+        console.log('================================');
 
-            // LOG DE DEBUG
-            console.log('===== ENVIANDO =====');
-            console.log('Sua Filial:', suaFilialValue);
-            console.log('Seu Nome:', seuNomeValue);
-            console.log('Seu Telefone:', seuTelefoneValue);
-            console.log('Cliente Nome:', clienteNomeValue);
-            console.log('Cliente CPF:', clienteCPFValue);
-            console.log('Cliente Telefone:', clienteTelefoneValue);
-            console.log('Cliente Email:', clienteEmailValue);
-            console.log('Cliente Endereço:', clienteEnderecoValue);
-            console.log('Cliente Bairro:', clienteBairroValue);
-            console.log('Cliente Cidade:', clienteCidadeValue);
-            console.log('Plano:', planoValue);
-            console.log('Adicionais:', adicionaisStr);
-            console.log('Vencimento:', vencimentoValue);
-            console.log('====================');
-
-            // PAYLOAD FINAL
-            const payload = {
-                dataEnvio: new Date().toLocaleString('pt-BR'),
-                unidade: suaFilialValue,
-                nomeIndicador: seuNomeValue,
-                telefoneIndicador: seuTelefoneValue,
-                nomeCliente: clienteNomeValue,
-                cpf: clienteCPFValue,
-                telefoneCelular: clienteTelefoneValue,
-                emailCliente: clienteEmailValue,
-                endereco: clienteEnderecoValue,
-                bairro: clienteBairroValue,
-                cidade: clienteCidadeValue,
-                plano: planoValue,
-                adicionais: adicionaisStr,
-                dataVencimento: vencimentoValue,
-                observacoes: obsValue,
-                fotoCliente: fotoBase64
-            };
-            
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                loadingMsg.classList.remove('show');
-                successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}!`;
-                successMsg.classList.add('show');
-                document.getElementById('formAdesao').reset();
-                
-                document.querySelectorAll('.day-button').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                vencimentoDia.value = '';
-                fotoPreview.style.display = 'none';
-                fotoNomearquivo.textContent = '';
-                
-                setTimeout(() => {
-                    successMsg.classList.remove('show');
-                    submitBtn.disabled = false;
-                }, 3000);
-            } else {
-                throw new Error(result.error || 'Erro ao enviar');
-            }
-        }
+        // PAYLOAD FINAL COM MÚLTIPLAS FOTOS
+        const payload = {
+            dataEnvio: new Date().toLocaleString('pt-BR'),
+            unidade: suaFilialValue,
+            nomeIndicador: seuNomeValue,
+            telefoneIndicador: seuTelefoneValue,
+            nomeCliente: clienteNomeValue,
+            cpf: clienteCPFValue,
+            telefoneCelular: clienteTelefoneValue,
+            emailCliente: clienteEmailValue,
+            endereco: clienteEnderecoValue,
+            bairro: clienteBairroValue,
+            cidade: clienteCidadeValue,
+            plano: planoValue,
+            adicionais: adicionaisStr,
+            dataVencimento: vencimentoValue,
+            observacoes: obsValue,
+            fotos: fotosArray,
+            totalFotos: fotosArray.length
+        };
         
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            loadingMsg.classList.remove('show');
+            successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}! (${fotosArray.length} foto(s))`;
+            successMsg.classList.add('show');
+            document.getElementById('formAdesao').reset();
+            
+            document.querySelectorAll('.day-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            vencimentoDia.value = '';
+            previewContainer.innerHTML = '';
+            fotoContador.textContent = '';
+            fotosArray = [];
+            inputFotos.value = '';
+            
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+                submitBtn.disabled = false;
+            }, 3000);
+        } else {
+            throw new Error(result.error || 'Erro ao enviar');
+        }
     } catch (erro) {
         loadingMsg.classList.remove('show');
         errorMsg.textContent = '❌ Erro: ' + erro.message;
@@ -415,7 +449,7 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
     }
 });
 
-console.log('✅ Formulário v3 SEM BUGS ativado');
+console.log('✅ Formulário pronto para múltiplas fotos!');
 </script>
 
 </body>
