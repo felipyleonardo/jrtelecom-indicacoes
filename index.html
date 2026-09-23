@@ -419,8 +419,22 @@
                         <input type="text" id="bairro" name="bairro" required>
                     </div>
                     <div class="form-group">
-                        <label for="cidade">Cidade (Determinará a aba) <span class="required">*</span></label>
-                        <input type="text" id="cidade" name="cidade" required>
+                        <label for="cidade">Cidade do Cliente (Determinará a aba) <span class="required">*</span></label>
+                        <select id="cidade" name="cidade" required>
+                            <option value="">-- Selecione a cidade --</option>
+                            <option value="Petrolina">Petrolina</option>
+                            <option value="Dormentes">Dormentes</option>
+                            <option value="Juazeiro">Juazeiro</option>
+                            <option value="Pilar">Pilar</option>
+                            <option value="Jaguarari">Jaguarari</option>
+                            <option value="Camaçari">Camaçari</option>
+                            <option value="Campo Alegre de Lourdes">Campo Alegre de Lourdes</option>
+                            <option value="Casa Nova">Casa Nova</option>
+                            <option value="Remanso">Remanso</option>
+                            <option value="Santana">Santana</option>
+                            <option value="São Raimundo Nonato">São Raimundo Nonato</option>
+                            <option value="Sobradinho">Sobradinho</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -450,187 +464,3 @@
                     <input type="radio" id="plano800" name="plano" value="800 Mega - R$ 99,90" required>
                     <label for="plano800" style="cursor: pointer; margin: 0; flex: 1;">
                         <div class="plano-velocidade">800 Mega - R$ 99,90</div>
-                        <div class="plano-detalhes">Download até 800Mbps • Upload até 400Mbps</div>
-                    </label>
-                </div>
-
-                <div class="plano-card">
-                    <input type="radio" id="plano1giga" name="plano" value="1 Giga - R$ 159,90" required>
-                    <label for="plano1giga" style="cursor: pointer; margin: 0; flex: 1;">
-                        <div class="plano-velocidade">1 Giga - R$ 159,90</div>
-                        <div class="plano-detalhes">Download até 1000Mbps • Upload até 500Mbps</div>
-                    </label>
-                </div>
-
-                <!-- ADICIONAIS -->
-                <div class="adicionais-group">
-                    <span class="adicionais-label">Adicionar ao combo (opcional)</span>
-                    
-                    <div class="adicional-card">
-                        <input type="checkbox" id="telefoniaFixa" name="telefoniaFixa" value="Telefonia Fixa - R$ 9,90/mês">
-                        <label for="telefoniaFixa">📞 Telefonia Fixa - R$ 9,90/mês</label>
-                    </div>
-
-                    <div class="adicional-card">
-                        <input type="checkbox" id="wifiPlus" name="wifiPlus" value="Wi-Fi Plus - R$ 21,90/mês">
-                        <label for="wifiPlus">📡 Wi-Fi Plus - R$ 21,90/mês</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VENCIMENTO -->
-            <div class="section">
-                <div class="section-title">📅 Vencimento</div>
-                <div class="form-group">
-                    <label>Dia do vencimento <span class="required">*</span></label>
-                    <div class="days-grid" id="daysGrid"></div>
-                    <input type="hidden" id="dataVencimento" name="dataVencimento" required>
-                </div>
-            </div>
-
-            <!-- OBSERVAÇÕES -->
-            <div class="section">
-                <div class="section-title">📝 Observações</div>
-                <div class="form-group">
-                    <label for="observacoes">Informações adicionais (opcional)</label>
-                    <textarea id="observacoes" name="observacoes" placeholder="Adicione informações extras sobre o cliente..."></textarea>
-                </div>
-            </div>
-
-            <!-- BOTÕES -->
-            <div class="button-group">
-                <button type="reset" class="btn-reset">Limpar</button>
-                <button type="submit" class="btn-submit" id="submitBtn">Enviar Indicação</button>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-<script>
-    // Gerar dias de 1 a 30
-    const daysGrid = document.getElementById('daysGrid');
-    const dataVencimento = document.getElementById('dataVencimento');
-
-    for (let i = 1; i <= 30; i++) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'day-button';
-        button.textContent = String(i).padStart(2, '0');
-        button.dataset.day = i;
-        
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            document.querySelectorAll('.day-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            button.classList.add('selected');
-            dataVencimento.value = String(i).padStart(2, '0');
-        });
-        
-        daysGrid.appendChild(button);
-    }
-
-    // URL do Google Apps Script v2.3
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVAtq9dap0Av4RCCNhmR2n0Odnhe2M_siN9nrD8J69bnd9MrQLfm0SlZpQTbpa_OXQhQ/exec';
-
-    // Submit do formulário
-    document.getElementById('formAdesao').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const loadingMsg = document.getElementById('loadingMsg');
-        const errorMsg = document.getElementById('errorMsg');
-        const successMsg = document.getElementById('successMsg');
-        const submitBtn = document.getElementById('submitBtn');
-        
-        // Limpar mensagens anteriores
-        loadingMsg.classList.remove('show');
-        errorMsg.classList.remove('show');
-        successMsg.classList.remove('show');
-        
-        // Validar vencimento
-        if (!dataVencimento.value) {
-            errorMsg.textContent = '❌ Por favor, selecione um dia de vencimento.';
-            errorMsg.classList.add('show');
-            return;
-        }
-        
-        // Mostrar mensagem de carregamento
-        loadingMsg.classList.add('show');
-        submitBtn.disabled = true;
-        
-        try {
-            const formData = new FormData(this);
-            
-            // Adiciona adicionais selecionados
-            const adicionais = [];
-            if (document.getElementById('telefoniaFixa').checked) {
-                adicionais.push(document.getElementById('telefoniaFixa').value);
-            }
-            if (document.getElementById('wifiPlus').checked) {
-                adicionais.push(document.getElementById('wifiPlus').value);
-            }
-            
-            const payload = {
-                dataEnvio: new Date().toLocaleString('pt-BR'),
-                filial: document.getElementById('filial').value,
-                nomeIndicador: document.getElementById('nomeIndicador').value,
-                telefoneIndicador: document.getElementById('telefoneIndicador').value,
-                nomeCliente: document.getElementById('nomeCliente').value,
-                cpf: document.getElementById('cpf').value,
-                telefoneCelular: document.getElementById('telefoneCelular').value,
-                emailCliente: document.getElementById('emailCliente').value,
-                endereco: document.getElementById('endereco').value,
-                bairro: document.getElementById('bairro').value,
-                cidade: document.getElementById('cidade').value,
-                plano: document.querySelector('input[name="plano"]:checked').value,
-                adicionais: adicionais.length > 0 ? adicionais.join(' | ') : 'Nenhum',
-                dataVencimento: document.getElementById('dataVencimento').value,
-                observacoes: document.getElementById('observacoes').value,
-                fotoCliente: ''
-            };
-            
-            // Enviar para Apps Script
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                loadingMsg.classList.remove('show');
-                successMsg.textContent = `✅ Indicação de ${payload.nomeCliente} enviada com sucesso para ${result.aba}!`;
-                successMsg.classList.add('show');
-                this.reset();
-                
-                // Remove seleção de dias
-                document.querySelectorAll('.day-button').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                dataVencimento.value = '';
-                
-                setTimeout(() => {
-                    successMsg.classList.remove('show');
-                    submitBtn.disabled = false;
-                }, 3000);
-            } else {
-                throw new Error(result.error || 'Erro ao enviar');
-            }
-            
-        } catch (erro) {
-            loadingMsg.classList.remove('show');
-            errorMsg.textContent = '❌ Erro ao enviar indicação. Tente novamente.';
-            errorMsg.classList.add('show');
-            submitBtn.disabled = false;
-            console.error('Erro:', erro);
-        }
-    });
-
-    console.log('✅ Formulário de Indicações JR Telecom v2.3 (Layout v1) ativado');
-</script>
-
-</body>
-</html>
