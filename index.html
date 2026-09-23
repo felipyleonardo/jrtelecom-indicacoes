@@ -40,11 +40,6 @@
             font-weight: 700;
         }
 
-        .header p {
-            font-size: 13px;
-            opacity: 0.95;
-        }
-
         .form-content {
             padding: 25px;
         }
@@ -374,7 +369,6 @@
         <div id="loadingMsg" class="loading-message">⏳ Enviando indicação...</div>
 
         <form id="formAdesao">
-            <!-- FILIAL -->
             <div class="section">
                 <div class="section-title">🏢 Sua Filial</div>
                 <div class="form-group">
@@ -397,7 +391,6 @@
                 </div>
             </div>
 
-            <!-- INDICADOR -->
             <div class="section">
                 <div class="section-title">👤 Seus Dados</div>
                 <div class="form-row">
@@ -412,7 +405,6 @@
                 </div>
             </div>
 
-            <!-- CLIENTE -->
             <div class="section">
                 <div class="section-title">🔗 Dados do Cliente</div>
                 <div class="form-row full">
@@ -469,7 +461,6 @@
                 </div>
             </div>
 
-            <!-- PLANO -->
             <div class="section">
                 <div class="section-title">⚡ Plano Desejado</div>
                 <label style="margin-bottom: 12px;">Selecione um plano <span class="required">*</span></label>
@@ -506,7 +497,6 @@
                     </label>
                 </div>
 
-                <!-- ADICIONAIS -->
                 <div class="adicionais-group">
                     <span class="adicionais-label">Adicionar ao combo (opcional)</span>
                     
@@ -522,7 +512,6 @@
                 </div>
             </div>
 
-            <!-- VENCIMENTO -->
             <div class="section">
                 <div class="section-title">📅 Vencimento</div>
                 <div class="form-group">
@@ -532,7 +521,6 @@
                 </div>
             </div>
 
-            <!-- FOTOS -->
             <div class="section">
                 <div class="section-title">📸 Foto do Cliente (Opcional)</div>
                 <div class="form-group">
@@ -548,7 +536,6 @@
                 </div>
             </div>
 
-            <!-- OBSERVAÇÕES -->
             <div class="section">
                 <div class="section-title">📝 Observações</div>
                 <div class="form-group">
@@ -557,7 +544,6 @@
                 </div>
             </div>
 
-            <!-- BOTÕES -->
             <div class="button-group">
                 <button type="reset" class="btn-reset">Limpar</button>
                 <button type="submit" class="btn-submit" id="submitBtn">Enviar Indicação</button>
@@ -568,7 +554,6 @@
 </div>
 
 <script>
-    // Gerar dias de 1 a 30
     const daysGrid = document.getElementById('daysGrid');
     const dataVencimento = document.getElementById('dataVencimento');
 
@@ -581,11 +566,9 @@
         
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            
             document.querySelectorAll('.day-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            
             button.classList.add('selected');
             dataVencimento.value = String(i).padStart(2, '0');
         });
@@ -593,7 +576,6 @@
         daysGrid.appendChild(button);
     }
 
-    // Prévia de foto
     const fotoInput = document.getElementById('fotoCliente');
     const fileName = document.getElementById('fileName');
     const previewFoto = document.getElementById('previewFoto');
@@ -602,7 +584,6 @@
         const file = e.target.files[0];
         if (file) {
             fileName.textContent = '✅ ' + file.name;
-            
             const reader = new FileReader();
             reader.onload = function(event) {
                 previewFoto.src = event.target.result;
@@ -612,10 +593,8 @@
         }
     });
 
-    // URL do Google Apps Script v2.3
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVAtq9dap0Av4RCCNhmR2n0Odnhe2M_siN9nrD8J69bnd9MrQLfm0SlZpQTbpa_OXQhQ/exec';
 
-    // Submit do formulário
     document.getElementById('formAdesao').addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -624,24 +603,20 @@
         const successMsg = document.getElementById('successMsg');
         const submitBtn = document.getElementById('submitBtn');
         
-        // Limpar mensagens anteriores
         loadingMsg.classList.remove('show');
         errorMsg.classList.remove('show');
         successMsg.classList.remove('show');
         
-        // Validar vencimento
         if (!dataVencimento.value) {
             errorMsg.textContent = '❌ Por favor, selecione um dia de vencimento.';
             errorMsg.classList.add('show');
             return;
         }
         
-        // Mostrar mensagem de carregamento
         loadingMsg.classList.add('show');
         submitBtn.disabled = true;
         
         try {
-            // Adiciona adicionais selecionados
             const adicionais = [];
             if (document.getElementById('telefoniaFixa').checked) {
                 adicionais.push(document.getElementById('telefoniaFixa').value);
@@ -650,7 +625,6 @@
                 adicionais.push(document.getElementById('wifiPlus').value);
             }
             
-            // Processar foto se houver
             let fotoBase64 = '';
             if (fotoInput.files.length > 0) {
                 const reader = new FileReader();
@@ -683,9 +657,8 @@
                     fotoCliente: fotoBase64
                 };
                 
-                console.log('Enviando para Apps Script - Cidade: ' + payload.cidade);
+                console.log('Enviando - Cidade: ' + payload.cidade);
                 
-                // Enviar para Apps Script
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -699,7 +672,6 @@
                     successMsg.classList.add('show');
                     document.getElementById('formAdesao').reset();
                     
-                    // Remove seleção de dias
                     document.querySelectorAll('.day-button').forEach(btn => {
                         btn.classList.remove('selected');
                     });
@@ -718,14 +690,12 @@
             
         } catch (erro) {
             loadingMsg.classList.remove('show');
-            errorMsg.textContent = '❌ Erro ao enviar indicação. Tente novamente: ' + erro.message;
+            errorMsg.textContent = '❌ Erro: ' + erro.message;
             errorMsg.classList.add('show');
             submitBtn.disabled = false;
             console.error('Erro:', erro);
         }
     });
-
-    console.log('✅ Formulário de Indicações JR Telecom v2.3 COMPLETO ativado');
 </script>
 
 </body>
