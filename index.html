@@ -320,14 +320,45 @@
             border-color: #0033cc;
         }
 
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #0033cc;
-            padding: 12px;
-            margin-bottom: 15px;
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 10px;
+            background: #f8faff;
+            border: 2px dashed #0033cc;
             border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #0033cc;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #e3f2fd;
+        }
+
+        .file-name {
             font-size: 12px;
-            color: #1565c0;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .preview-foto {
+            width: 100%;
+            max-height: 150px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
@@ -346,7 +377,6 @@
             <!-- FILIAL -->
             <div class="section">
                 <div class="section-title">🏢 Sua Filial</div>
-
                 <div class="form-group">
                     <label for="filial">De qual filial você é? <span class="required">*</span></label>
                     <select id="filial" name="filial" required>
@@ -419,7 +449,7 @@
                         <input type="text" id="bairro" name="bairro" required>
                     </div>
                     <div class="form-group">
-                        <label for="cidade">Cidade do Cliente (Determinará a aba) <span class="required">*</span></label>
+                        <label for="cidade">Cidade do Cliente <span class="required">*</span></label>
                         <select id="cidade" name="cidade" required>
                             <option value="">-- Selecione a cidade --</option>
                             <option value="Petrolina">Petrolina</option>
@@ -502,6 +532,22 @@
                 </div>
             </div>
 
+            <!-- FOTOS -->
+            <div class="section">
+                <div class="section-title">📸 Foto do Cliente (Opcional)</div>
+                <div class="form-group">
+                    <label for="fotoCliente">Selecione uma foto</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fotoCliente" name="fotoCliente" accept="image/*">
+                        <label for="fotoCliente" class="file-input-label">
+                            📷 Clique para selecionar foto
+                        </label>
+                        <div class="file-name" id="fileName"></div>
+                        <img id="previewFoto" class="preview-foto" alt="Preview da foto">
+                    </div>
+                </div>
+            </div>
+
             <!-- OBSERVAÇÕES -->
             <div class="section">
                 <div class="section-title">📝 Observações</div>
@@ -547,6 +593,25 @@
         daysGrid.appendChild(button);
     }
 
+    // Prévia de foto
+    const fotoInput = document.getElementById('fotoCliente');
+    const fileName = document.getElementById('fileName');
+    const previewFoto = document.getElementById('previewFoto');
+
+    fotoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            fileName.textContent = '✅ ' + file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                previewFoto.src = event.target.result;
+                previewFoto.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
     // URL do Google Apps Script v2.3
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVAtq9dap0Av4RCCNhmR2n0Odnhe2M_siN9nrD8J69bnd9MrQLfm0SlZpQTbpa_OXQhQ/exec';
 
@@ -576,8 +641,6 @@
         submitBtn.disabled = true;
         
         try {
-            const formData = new FormData(this);
-            
             // Adiciona adicionais selecionados
             const adicionais = [];
             if (document.getElementById('telefoniaFixa').checked) {
@@ -587,63 +650,82 @@
                 adicionais.push(document.getElementById('wifiPlus').value);
             }
             
-            const payload = {
-                dataEnvio: new Date().toLocaleString('pt-BR'),
-                filial: document.getElementById('filial').value,
-                nomeIndicador: document.getElementById('nomeIndicador').value,
-                telefoneIndicador: document.getElementById('telefoneIndicador').value,
-                nomeCliente: document.getElementById('nomeCliente').value,
-                cpf: document.getElementById('cpf').value,
-                telefoneCelular: document.getElementById('telefoneCelular').value,
-                emailCliente: document.getElementById('emailCliente').value,
-                endereco: document.getElementById('endereco').value,
-                bairro: document.getElementById('bairro').value,
-                cidade: document.getElementById('cidade').value,
-                plano: document.querySelector('input[name="plano"]:checked').value,
-                adicionais: adicionais.length > 0 ? adicionais.join(' | ') : 'Nenhum',
-                dataVencimento: document.getElementById('dataVencimento').value,
-                observacoes: document.getElementById('observacoes').value,
-                fotoCliente: ''
-            };
-            
-            // Enviar para Apps Script
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                loadingMsg.classList.remove('show');
-                successMsg.textContent = `✅ Indicação de ${payload.nomeCliente} enviada com sucesso para ${result.aba}!`;
-                successMsg.classList.add('show');
-                this.reset();
-                
-                // Remove seleção de dias
-                document.querySelectorAll('.day-button').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                dataVencimento.value = '';
-                
-                setTimeout(() => {
-                    successMsg.classList.remove('show');
-                    submitBtn.disabled = false;
-                }, 3000);
+            // Processar foto se houver
+            let fotoBase64 = '';
+            if (fotoInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = async function() {
+                    fotoBase64 = reader.result;
+                    enviarFormulario(adicionais, fotoBase64);
+                };
+                reader.readAsDataURL(fotoInput.files[0]);
             } else {
-                throw new Error(result.error || 'Erro ao enviar');
+                enviarFormulario(adicionais, '');
+            }
+
+            async function enviarFormulario(adicionais, fotoBase64) {
+                const payload = {
+                    dataEnvio: new Date().toLocaleString('pt-BR'),
+                    filial: document.getElementById('filial').value,
+                    nomeIndicador: document.getElementById('nomeIndicador').value,
+                    telefoneIndicador: document.getElementById('telefoneIndicador').value,
+                    nomeCliente: document.getElementById('nomeCliente').value,
+                    cpf: document.getElementById('cpf').value,
+                    telefoneCelular: document.getElementById('telefoneCelular').value,
+                    emailCliente: document.getElementById('emailCliente').value,
+                    endereco: document.getElementById('endereco').value,
+                    bairro: document.getElementById('bairro').value,
+                    cidade: document.getElementById('cidade').value,
+                    plano: document.querySelector('input[name="plano"]:checked').value,
+                    adicionais: adicionais.length > 0 ? adicionais.join(' | ') : 'Nenhum',
+                    dataVencimento: document.getElementById('dataVencimento').value,
+                    observacoes: document.getElementById('observacoes').value,
+                    fotoCliente: fotoBase64
+                };
+                
+                console.log('Enviando para Apps Script - Cidade: ' + payload.cidade);
+                
+                // Enviar para Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadingMsg.classList.remove('show');
+                    successMsg.textContent = `✅ Indicação de ${payload.nomeCliente} enviada com sucesso para ${result.aba}!`;
+                    successMsg.classList.add('show');
+                    document.getElementById('formAdesao').reset();
+                    
+                    // Remove seleção de dias
+                    document.querySelectorAll('.day-button').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                    dataVencimento.value = '';
+                    previewFoto.style.display = 'none';
+                    fileName.textContent = '';
+                    
+                    setTimeout(() => {
+                        successMsg.classList.remove('show');
+                        submitBtn.disabled = false;
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Erro ao enviar');
+                }
             }
             
         } catch (erro) {
             loadingMsg.classList.remove('show');
-            errorMsg.textContent = '❌ Erro ao enviar indicação. Tente novamente.';
+            errorMsg.textContent = '❌ Erro ao enviar indicação. Tente novamente: ' + erro.message;
             errorMsg.classList.add('show');
             submitBtn.disabled = false;
             console.error('Erro:', erro);
         }
     });
 
-    console.log('✅ Formulário de Indicações JR Telecom v2.3 (Layout v1) ativado');
+    console.log('✅ Formulário de Indicações JR Telecom v2.3 COMPLETO ativado');
 </script>
 
 </body>
