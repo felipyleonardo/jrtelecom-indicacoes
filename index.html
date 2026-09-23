@@ -70,11 +70,12 @@
         <div id="loadingMsg" class="loading-message">⏳ Enviando indicação...</div>
 
         <form id="formAdesao">
+            <!-- SEÇÃO 1: SUA FILIAL -->
             <div class="section">
                 <div class="section-title">🏢 Sua Filial</div>
                 <div class="form-group">
-                    <label for="filial">De qual filial você é? <span class="required">*</span></label>
-                    <select id="filial" required>
+                    <label for="suaFilial">De qual filial você é? <span class="required">*</span></label>
+                    <select id="suaFilial" required>
                         <option value="">-- Selecione sua filial --</option>
                         <option value="Petrolina">Petrolina</option>
                         <option value="Dormentes">Dormentes</option>
@@ -92,58 +93,60 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 2: SEUS DADOS -->
             <div class="section">
                 <div class="section-title">👤 Seus Dados</div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="nomeIndicador">Seu Nome <span class="required">*</span></label>
-                        <input type="text" id="nomeIndicador" required>
+                        <label for="seuNome">Seu Nome <span class="required">*</span></label>
+                        <input type="text" id="seuNome" required>
                     </div>
                     <div class="form-group">
-                        <label for="telefoneIndicador">Seu Telefone <span class="required">*</span></label>
-                        <input type="tel" id="telefoneIndicador" required>
+                        <label for="seuTelefone">Seu Telefone <span class="required">*</span></label>
+                        <input type="tel" id="seuTelefone" required>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 3: DADOS DO CLIENTE -->
             <div class="section">
                 <div class="section-title">🔗 Dados do Cliente</div>
                 <div class="form-row full">
                     <div class="form-group">
-                        <label for="nomeCliente">Nome / Razão Social <span class="required">*</span></label>
-                        <input type="text" id="nomeCliente" required>
+                        <label for="clienteNome">Nome / Razão Social <span class="required">*</span></label>
+                        <input type="text" id="clienteNome" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="cpf">CPF / CNPJ <span class="required">*</span></label>
-                        <input type="text" id="cpf" required>
+                        <label for="clienteCPF">CPF / CNPJ <span class="required">*</span></label>
+                        <input type="text" id="clienteCPF" required>
                     </div>
                     <div class="form-group">
-                        <label for="telefoneCelular">Telefone do Cliente <span class="required">*</span></label>
-                        <input type="tel" id="telefoneCelular" required>
-                    </div>
-                </div>
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="emailCliente">E-mail <span class="required">*</span></label>
-                        <input type="email" id="emailCliente" required>
+                        <label for="clienteTelefone">Telefone do Cliente <span class="required">*</span></label>
+                        <input type="tel" id="clienteTelefone" required>
                     </div>
                 </div>
                 <div class="form-row full">
                     <div class="form-group">
-                        <label for="endereco">Endereço <span class="required">*</span></label>
-                        <input type="text" id="endereco" placeholder="Rua/Avenida, número" required>
+                        <label for="clienteEmail">E-mail <span class="required">*</span></label>
+                        <input type="email" id="clienteEmail" required>
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="clienteEndereco">Endereço <span class="required">*</span></label>
+                        <input type="text" id="clienteEndereco" placeholder="Rua/Avenida, número" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="bairro">Bairro <span class="required">*</span></label>
-                        <input type="text" id="bairro" required>
+                        <label for="clienteBairro">Bairro <span class="required">*</span></label>
+                        <input type="text" id="clienteBairro" required>
                     </div>
                     <div class="form-group">
-                        <label for="cidade">Cidade do Cliente <span class="required">*</span></label>
-                        <select id="cidade" required>
+                        <label for="clienteCidade">Cidade do Cliente <span class="required">*</span></label>
+                        <select id="clienteCidade" required>
                             <option value="">-- Selecione a cidade --</option>
                             <option value="Petrolina">Petrolina</option>
                             <option value="Dormentes">Dormentes</option>
@@ -162,65 +165,69 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 4: PLANO -->
             <div class="section">
                 <div class="section-title">⚡ Plano Desejado</div>
                 <label style="margin-bottom: 12px;">Selecione um plano <span class="required">*</span></label>
                 <div class="plano-card">
-                    <input type="radio" id="plano500" name="plano" value="500 Mega - R$ 79,90" required>
-                    <label for="plano500" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">500 Mega - R$ 79,90</div><div class="plano-detalhes">Download até 500Mbps • Upload até 250Mbps</div></label>
+                    <input type="radio" id="plano1" name="planoSelecionado" value="500 Mega - R$ 79,90" required>
+                    <label for="plano1" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">500 Mega - R$ 79,90</div><div class="plano-detalhes">Download até 500Mbps • Upload até 250Mbps</div></label>
                 </div>
                 <div class="plano-card">
-                    <input type="radio" id="plano600" name="plano" value="600 Mega - R$ 89,90" required>
-                    <label for="plano600" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">600 Mega - R$ 89,90</div><div class="plano-detalhes">Download até 600Mbps • Upload até 300Mbps</div></label>
+                    <input type="radio" id="plano2" name="planoSelecionado" value="600 Mega - R$ 89,90" required>
+                    <label for="plano2" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">600 Mega - R$ 89,90</div><div class="plano-detalhes">Download até 600Mbps • Upload até 300Mbps</div></label>
                 </div>
                 <div class="plano-card">
-                    <input type="radio" id="plano800" name="plano" value="800 Mega - R$ 99,90" required>
-                    <label for="plano800" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">800 Mega - R$ 99,90</div><div class="plano-detalhes">Download até 800Mbps • Upload até 400Mbps</div></label>
+                    <input type="radio" id="plano3" name="planoSelecionado" value="800 Mega - R$ 99,90" required>
+                    <label for="plano3" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">800 Mega - R$ 99,90</div><div class="plano-detalhes">Download até 800Mbps • Upload até 400Mbps</div></label>
                 </div>
                 <div class="plano-card">
-                    <input type="radio" id="plano1giga" name="plano" value="1 Giga - R$ 159,90" required>
-                    <label for="plano1giga" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">1 Giga - R$ 159,90</div><div class="plano-detalhes">Download até 1000Mbps • Upload até 500Mbps</div></label>
+                    <input type="radio" id="plano4" name="planoSelecionado" value="1 Giga - R$ 159,90" required>
+                    <label for="plano4" style="cursor: pointer; margin: 0; flex: 1;"><div class="plano-velocidade">1 Giga - R$ 159,90</div><div class="plano-detalhes">Download até 1000Mbps • Upload até 500Mbps</div></label>
                 </div>
                 <div class="adicionais-group">
                     <span class="adicionais-label">Adicionar ao combo (opcional)</span>
                     <div class="adicional-card">
-                        <input type="checkbox" id="telefoniaFixa" value="Telefonia Fixa - R$ 9,90/mês">
-                        <label for="telefoniaFixa">📞 Telefonia Fixa - R$ 9,90/mês</label>
+                        <input type="checkbox" id="adicional1" value="Telefonia Fixa - R$ 9,90/mês">
+                        <label for="adicional1">📞 Telefonia Fixa - R$ 9,90/mês</label>
                     </div>
                     <div class="adicional-card">
-                        <input type="checkbox" id="wifiPlus" value="Wi-Fi Plus - R$ 21,90/mês">
-                        <label for="wifiPlus">📡 Wi-Fi Plus - R$ 21,90/mês</label>
+                        <input type="checkbox" id="adicional2" value="Wi-Fi Plus - R$ 21,90/mês">
+                        <label for="adicional2">📡 Wi-Fi Plus - R$ 21,90/mês</label>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 5: VENCIMENTO -->
             <div class="section">
                 <div class="section-title">📅 Vencimento</div>
                 <div class="form-group">
                     <label>Dia do vencimento <span class="required">*</span></label>
                     <div class="days-grid" id="daysGrid"></div>
-                    <input type="hidden" id="dataVencimento" required>
+                    <input type="hidden" id="vencimentoDia" required>
                 </div>
             </div>
 
+            <!-- SEÇÃO 6: FOTO -->
             <div class="section">
                 <div class="section-title">📸 Foto do Cliente (Opcional)</div>
                 <div class="form-group">
-                    <label for="fotoCliente">Selecione uma foto</label>
+                    <label for="fotoPNG">Selecione uma foto</label>
                     <div class="file-input-wrapper">
-                        <input type="file" id="fotoCliente" accept="image/*">
-                        <label for="fotoCliente" class="file-input-label">📷 Clique para selecionar foto</label>
-                        <div class="file-name" id="fileName"></div>
-                        <img id="previewFoto" class="preview-foto" alt="Preview">
+                        <input type="file" id="fotoPNG" accept="image/*">
+                        <label for="fotoPNG" class="file-input-label">📷 Clique para selecionar foto</label>
+                        <div class="file-name" id="fotoNomearquivo"></div>
+                        <img id="fotoPreview" class="preview-foto" alt="Preview">
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 7: OBSERVAÇÕES -->
             <div class="section">
                 <div class="section-title">📝 Observações</div>
                 <div class="form-group">
-                    <label for="observacoes">Informações adicionais (opcional)</label>
-                    <textarea id="observacoes" placeholder="Adicione informações extras..."></textarea>
+                    <label for="obsTexto">Informações adicionais (opcional)</label>
+                    <textarea id="obsTexto" placeholder="Adicione informações extras..."></textarea>
                 </div>
             </div>
 
@@ -233,8 +240,9 @@
 </div>
 
 <script>
+// ===== GRADE DE DIAS =====
 const daysGrid = document.getElementById('daysGrid');
-const dataVencimento = document.getElementById('dataVencimento');
+const vencimentoDia = document.getElementById('vencimentoDia');
 
 for (let i = 1; i <= 30; i++) {
     const button = document.createElement('button');
@@ -245,28 +253,30 @@ for (let i = 1; i <= 30; i++) {
         e.preventDefault();
         document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
-        dataVencimento.value = String(i).padStart(2, '0');
+        vencimentoDia.value = String(i).padStart(2, '0');
     });
     daysGrid.appendChild(button);
 }
 
-const fotoInput = document.getElementById('fotoCliente');
-const fileName = document.getElementById('fileName');
-const previewFoto = document.getElementById('previewFoto');
+// ===== FOTO =====
+const fotoPNG = document.getElementById('fotoPNG');
+const fotoNomearquivo = document.getElementById('fotoNomearquivo');
+const fotoPreview = document.getElementById('fotoPreview');
 
-fotoInput.addEventListener('change', function(e) {
+fotoPNG.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
-        fileName.textContent = '✅ ' + file.name;
+        fotoNomearquivo.textContent = '✅ ' + file.name;
         const reader = new FileReader();
         reader.onload = function(event) {
-            previewFoto.src = event.target.result;
-            previewFoto.style.display = 'block';
+            fotoPreview.src = event.target.result;
+            fotoPreview.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
 });
 
+// ===== ENVIO =====
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVAtq9dap0Av4RCCNhmR2n0Odnhe2M_siN9nrD8J69bnd9MrQLfm0SlZpQTbpa_OXQhQ/exec';
 
 document.getElementById('formAdesao').addEventListener('submit', async function(e) {
@@ -281,7 +291,7 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
     errorMsg.classList.remove('show');
     successMsg.classList.remove('show');
     
-    if (!dataVencimento.value) {
+    if (!vencimentoDia.value) {
         errorMsg.textContent = '❌ Por favor, selecione um dia de vencimento.';
         errorMsg.classList.add('show');
         return;
@@ -291,60 +301,79 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
     submitBtn.disabled = true;
     
     try {
-        const adicionais = [];
-        if (document.getElementById('telefoniaFixa').checked) {
-            adicionais.push(document.getElementById('telefoniaFixa').value);
+        // Capturar adicionais
+        const adicionaisList = [];
+        if (document.getElementById('adicional1').checked) {
+            adicionaisList.push(document.getElementById('adicional1').value);
         }
-        if (document.getElementById('wifiPlus').checked) {
-            adicionais.push(document.getElementById('wifiPlus').value);
+        if (document.getElementById('adicional2').checked) {
+            adicionaisList.push(document.getElementById('adicional2').value);
         }
         
         let fotoBase64 = '';
-        if (fotoInput.files.length > 0) {
+        if (fotoPNG.files.length > 0) {
             const reader = new FileReader();
             reader.onload = async function() {
                 fotoBase64 = reader.result;
-                enviarFormulario(adicionais, fotoBase64);
+                enviarDados(adicionaisList, fotoBase64);
             };
-            reader.readAsDataURL(fotoInput.files[0]);
+            reader.readAsDataURL(fotoPNG.files[0]);
         } else {
-            enviarFormulario(adicionais, '');
+            enviarDados(adicionaisList, '');
         }
 
-        async function enviarFormulario(adicionais, fotoBase64) {
-            const filialValue = document.getElementById('filial').value;
-            const nomeIndicadorValue = document.getElementById('nomeIndicador').value;
-            const telefoneIndicadorValue = document.getElementById('telefoneIndicador').value;
-            const nomeClienteValue = document.getElementById('nomeCliente').value;
-            const cpfValue = document.getElementById('cpf').value;
-            const telefoneCelularValue = document.getElementById('telefoneCelular').value;
-            const emailClienteValue = document.getElementById('emailCliente').value;
-            const enderecoValue = document.getElementById('endereco').value;
-            const bairroValue = document.getElementById('bairro').value;
-            const cidadeValue = document.getElementById('cidade').value;
-            const planoValue = document.querySelector('input[name="plano"]:checked').value;
-            const vencimentoValue = document.getElementById('dataVencimento').value;
-            const observacoesValue = document.getElementById('observacoes').value;
+        async function enviarDados(adicionaisList, fotoBase64) {
+            // CAPTURA EXATA DOS CAMPOS
+            const suaFilialValue = document.getElementById('suaFilial').value;
+            const seuNomeValue = document.getElementById('seuNome').value;
+            const seuTelefoneValue = document.getElementById('seuTelefone').value;
+            const clienteNomeValue = document.getElementById('clienteNome').value;
+            const clienteCPFValue = document.getElementById('clienteCPF').value;
+            const clienteTelefoneValue = document.getElementById('clienteTelefone').value;
+            const clienteEmailValue = document.getElementById('clienteEmail').value;
+            const clienteEnderecoValue = document.getElementById('clienteEndereco').value;
+            const clienteBairroValue = document.getElementById('clienteBairro').value;
+            const clienteCidadeValue = document.getElementById('clienteCidade').value;
+            const planoValue = document.querySelector('input[name="planoSelecionado"]:checked').value;
+            const vencimentoValue = document.getElementById('vencimentoDia').value;
+            const obsValue = document.getElementById('obsTexto').value || 'Sem observações';
 
-            console.log('DEBUG - Filial: [' + filialValue + ']');
-            console.log('DEBUG - Cidade: [' + cidadeValue + ']');
+            const adicionaisStr = adicionaisList.length > 0 ? adicionaisList.join(' | ') : 'Nenhum';
 
+            // LOG DE DEBUG
+            console.log('===== ENVIANDO =====');
+            console.log('Sua Filial:', suaFilialValue);
+            console.log('Seu Nome:', seuNomeValue);
+            console.log('Seu Telefone:', seuTelefoneValue);
+            console.log('Cliente Nome:', clienteNomeValue);
+            console.log('Cliente CPF:', clienteCPFValue);
+            console.log('Cliente Telefone:', clienteTelefoneValue);
+            console.log('Cliente Email:', clienteEmailValue);
+            console.log('Cliente Endereço:', clienteEnderecoValue);
+            console.log('Cliente Bairro:', clienteBairroValue);
+            console.log('Cliente Cidade:', clienteCidadeValue);
+            console.log('Plano:', planoValue);
+            console.log('Adicionais:', adicionaisStr);
+            console.log('Vencimento:', vencimentoValue);
+            console.log('====================');
+
+            // PAYLOAD FINAL
             const payload = {
                 dataEnvio: new Date().toLocaleString('pt-BR'),
-                filial: filialValue,
-                nomeIndicador: nomeIndicadorValue,
-                telefoneIndicador: telefoneIndicadorValue,
-                nomeCliente: nomeClienteValue,
-                cpf: cpfValue,
-                telefoneCelular: telefoneCelularValue,
-                emailCliente: emailClienteValue,
-                endereco: enderecoValue,
-                bairro: bairroValue,
-                cidade: cidadeValue,
+                unidade: suaFilialValue,
+                nomeIndicador: seuNomeValue,
+                telefoneIndicador: seuTelefoneValue,
+                nomeCliente: clienteNomeValue,
+                cpf: clienteCPFValue,
+                telefoneCelular: clienteTelefoneValue,
+                emailCliente: clienteEmailValue,
+                endereco: clienteEnderecoValue,
+                bairro: clienteBairroValue,
+                cidade: clienteCidadeValue,
                 plano: planoValue,
-                adicionais: adicionais.length > 0 ? adicionais.join(' | ') : 'Nenhum',
+                adicionais: adicionaisStr,
                 dataVencimento: vencimentoValue,
-                observacoes: observacoesValue,
+                observacoes: obsValue,
                 fotoCliente: fotoBase64
             };
             
@@ -357,16 +386,16 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             
             if (result.success) {
                 loadingMsg.classList.remove('show');
-                successMsg.textContent = `✅ Indicação de ${nomeClienteValue} enviada com sucesso para ${result.aba}!`;
+                successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}!`;
                 successMsg.classList.add('show');
                 document.getElementById('formAdesao').reset();
                 
                 document.querySelectorAll('.day-button').forEach(btn => {
                     btn.classList.remove('selected');
                 });
-                dataVencimento.value = '';
-                previewFoto.style.display = 'none';
-                fileName.textContent = '';
+                vencimentoDia.value = '';
+                fotoPreview.style.display = 'none';
+                fotoNomearquivo.textContent = '';
                 
                 setTimeout(() => {
                     successMsg.classList.remove('show');
@@ -386,7 +415,7 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
     }
 });
 
-console.log('✅ Formulário v2.3 CORRIGIDO ativado');
+console.log('✅ Formulário v3 SEM BUGS ativado');
 </script>
 
 </body>
