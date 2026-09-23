@@ -3,362 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indicação de Cliente - JR Telecom</title>
+    <title>Indicações JR Telecom</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0033cc 0%, #1a4d99 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 51, 204, 0.2);
             overflow: hidden;
         }
-
+        
         .header {
-            background: linear-gradient(135deg, #0033cc 0%, #0052a3 100%);
+            background: linear-gradient(135deg, #0033cc 0%, #1a4d99 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 30px;
             text-align: center;
         }
-
+        
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            font-weight: 700;
+            font-size: 32px;
+            margin-bottom: 10px;
         }
-
+        
         .header p {
             font-size: 14px;
-            opacity: 0.95;
+            opacity: 0.9;
         }
-
-        .form-container {
-            padding: 40px 30px;
+        
+        .form-wrapper {
+            padding: 40px;
         }
-
-        .section {
-            margin-bottom: 35px;
-        }
-
+        
         .section-title {
-            font-size: 16px;
-            font-weight: 700;
             color: #0033cc;
-            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 30px 0 20px 0;
             padding-bottom: 10px;
-            border-bottom: 2px solid #0033cc;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border-bottom: 3px solid #0033cc;
         }
-
+        
         .form-group {
             margin-bottom: 20px;
         }
-
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row-full {
+            grid-column: 1 / -1;
+        }
+        
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
             color: #333;
+            font-weight: 600;
             font-size: 14px;
         }
-
+        
         .required::after {
             content: " *";
-            color: #e74c3c;
+            color: #d63031;
         }
-
+        
         input[type="text"],
         input[type="email"],
         input[type="tel"],
+        input[type="number"],
         input[type="date"],
-        select {
+        input[type="file"],
+        select,
+        textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
             transition: all 0.3s ease;
         }
-
+        
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="tel"]:focus,
+        input[type="number"]:focus,
         input[type="date"]:focus,
-        select:focus {
-            outline: none;
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
             border-color: #0033cc;
+            outline: none;
             box-shadow: 0 0 0 3px rgba(0, 51, 204, 0.1);
         }
-
-        .row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230033cc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
         }
-
-        .row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        @media (max-width: 768px) {
-            .row-2, .row-3 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .planos-container {
+        
+        .checkbox-group {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-right: 10px;
+            accent-color: #0033cc;
+        }
+        
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline;
+        }
+        
+        .plan-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-top: 15px;
         }
-
-        .plano-card {
+        
+        .plan-card {
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             padding: 15px;
-            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: white;
+            background: #f9f9f9;
         }
-
-        .plano-card:hover {
-            border-color: #0033cc;
-            box-shadow: 0 4px 12px rgba(0, 51, 204, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .plano-card.selected {
-            background: linear-gradient(135deg, #0033cc 0%, #0052a3 100%);
-            color: white;
-            border-color: #0033cc;
-        }
-
-        .plano-card.selected input {
-            display: none;
-        }
-
-        .plano-card input {
-            margin-top: 10px;
-        }
-
-        .plano-velocidade {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .plano-preco {
-            font-size: 13px;
-            opacity: 0.8;
-        }
-
-        .adicionais-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .adicional-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .adicional-item:hover {
+        
+        .plan-card:hover {
             border-color: #0033cc;
             background: #f0f4ff;
         }
-
-        .adicional-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-            cursor: pointer;
+        
+        .plan-card input[type="radio"] {
+            margin-right: 10px;
         }
-
-        .vencimento-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .dia-btn {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            background: white;
+        
+        .plan-card label {
+            margin: 0;
             cursor: pointer;
+            display: inline;
             font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
         }
-
-        .dia-btn:hover {
-            border-color: #0033cc;
-            background: #f0f4ff;
-        }
-
-        .dia-btn.selected {
-            background: #0033cc;
-            color: white;
-            border-color: #0033cc;
-        }
-
-        .upload-area {
-            border: 2px dashed #0033cc;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f0f4ff;
-        }
-
-        .upload-area:hover {
-            background: #e0e8ff;
-            border-color: #0052a3;
-        }
-
-        .upload-area.dragover {
-            background: #e0e8ff;
-            border-color: #0052a3;
-            transform: scale(1.02);
-        }
-
-        .upload-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .upload-text {
-            font-size: 14px;
+        
+        .plan-card .price {
             color: #0033cc;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
         }
-
-        .file-input {
-            display: none;
-        }
-
-        .preview-image {
-            margin-top: 15px;
-            max-width: 200px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            padding: 5px;
-        }
-
+        
         .button-group {
             display: flex;
-            gap: 12px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
         }
-
+        
         button {
-            flex: 1;
-            padding: 14px 24px;
+            padding: 14px 40px;
+            font-size: 16px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
             cursor: pointer;
+            font-weight: 600;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
+        
         .btn-submit {
-            background: linear-gradient(135deg, #0033cc 0%, #0052a3 100%);
+            background: linear-gradient(135deg, #0033cc 0%, #1a4d99 100%);
             color: white;
+            min-width: 200px;
         }
-
+        
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 51, 204, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 51, 204, 0.3);
         }
-
+        
         .btn-submit:active {
             transform: translateY(0);
         }
-
-        .btn-limpar {
+        
+        .btn-reset {
             background: #f0f0f0;
             color: #333;
+            min-width: 150px;
         }
-
-        .btn-limpar:hover {
+        
+        .btn-reset:hover {
             background: #e0e0e0;
         }
-
-        .mensagem {
-            padding: 16px;
+        
+        .message {
+            display: none;
+            padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: none;
-            animation: slideIn 0.3s ease;
+            font-weight: 600;
+            animation: slideDown 0.3s ease;
         }
-
-        .mensagem.sucesso {
-            background: #d4edda;
-            border: 2px solid #28a745;
-            color: #155724;
-        }
-
-        .mensagem.erro {
-            background: #f8d7da;
-            border: 2px solid #f5c6cb;
-            color: #721c24;
-        }
-
-        .mensagem.carregando {
-            background: #cce5ff;
-            border: 2px solid #0033cc;
-            color: #0033cc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #0033cc;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes slideIn {
+        
+        @keyframes slideDown {
             from {
                 opacity: 0;
                 transform: translateY(-10px);
@@ -368,368 +258,387 @@
                 transform: translateY(0);
             }
         }
-
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #0033cc;
-            padding: 12px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #0033cc;
-            margin-top: 10px;
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
         }
-
-        footer {
-            background: #f5f5f5;
-            padding: 20px 30px;
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .message.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(0, 51, 204, 0.1);
+            border-top-color: #0033cc;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px dashed #0033cc;
+            border-radius: 8px;
             text-align: center;
-            border-top: 1px solid #e0e0e0;
-            font-size: 12px;
-            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #0033cc;
+            font-weight: 600;
+        }
+        
+        .file-input-label:hover {
+            background: #e8f1ff;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .file-name {
+            margin-top: 8px;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 5px solid #0033cc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #0c5460;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-wrapper {
+                padding: 20px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="header">
-        <h1>🎯 Sistema de Indicações</h1>
-        <p>JR Telecom - Indique clientes e ganhe comissões!</p>
-    </div>
-
-    <div class="form-container">
-        <div id="mensagem" class="mensagem"></div>
-
-        <form id="formulario">
-            <!-- SEÇÃO 1: DADOS DO INDICADOR -->
-            <div class="section">
-                <h2 class="section-title">📍 Dados do Indicador</h2>
-
-                <div class="row-2">
+    <div class="container">
+        <div class="header">
+            <h1>📱 Sistema de Indicações</h1>
+            <p>Ganhe comissões indicando clientes para serviços de telecomunicações</p>
+        </div>
+        
+        <div class="form-wrapper">
+            <form id="indicacaoForm">
+                <!-- Seleção de Filial (NOVO - v2.2) -->
+                <div class="section-title">🏢 Filial de Origem</div>
+                
+                <div class="info-box">
+                    ℹ️ Selecione sua filial. Os dados serão registrados na página específica dela.
+                </div>
+                
+                <div class="form-group">
+                    <label for="filial" class="required">Sua Filial</label>
+                    <select id="filial" name="filial" required>
+                        <option value="">-- Selecione sua filial --</option>
+                        <option value="Petrolina">Petrolina</option>
+                        <option value="Dormentes">Dormentes</option>
+                        <option value="Juazeiro">Juazeiro</option>
+                        <option value="Pilar">Pilar</option>
+                        <option value="Jaguarari">Jaguarari</option>
+                        <option value="Camaçari">Camaçari</option>
+                        <option value="Campo Alegre de Lourdes">Campo Alegre de Lourdes</option>
+                        <option value="Casa Nova">Casa Nova</option>
+                        <option value="Remanso">Remanso</option>
+                        <option value="Santana">Santana</option>
+                        <option value="São Raimundo Nonato">São Raimundo Nonato</option>
+                        <option value="Sobradinho">Sobradinho</option>
+                    </select>
+                </div>
+                
+                <!-- Dados do Indicador -->
+                <div class="section-title">👤 Dados do Indicador</div>
+                
+                <div class="form-row">
                     <div class="form-group">
                         <label for="nomeIndicador" class="required">Nome Completo</label>
                         <input type="text" id="nomeIndicador" name="nomeIndicador" placeholder="Seu nome" required>
                     </div>
+                    
                     <div class="form-group">
                         <label for="telefoneIndicador" class="required">Telefone</label>
                         <input type="tel" id="telefoneIndicador" name="telefoneIndicador" placeholder="(87) 98765-4321" required>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="unidade" class="required">Unidade</label>
-                    <select id="unidade" name="unidade" required>
-                        <option value="">-- Selecione uma unidade --</option>
-                        <option value="Juazeiro">Juazeiro</option>
-                        <option value="Pilar">Pilar</option>
-                        <option value="Jaguarari">Jaguarari</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 2: DADOS DO CLIENTE -->
-            <div class="section">
-                <h2 class="section-title">👤 Dados do Cliente</h2>
-
-                <div class="form-group">
-                    <label for="nomeCliente" class="required">Nome Completo ou Razão Social</label>
-                    <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Nome da pessoa ou empresa" required>
-                </div>
-
-                <div class="row-2">
+                
+                <!-- Dados do Cliente -->
+                <div class="section-title">🔗 Dados do Cliente</div>
+                
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="cpf" class="required">CPF ou CNPJ</label>
-                        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00 ou 00.000.000/0000-00" required>
+                        <label for="nomeCliente" class="required">Nome / Razão Social</label>
+                        <input type="text" id="nomeCliente" name="nomeCliente" placeholder="João da Silva" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="telefoneCelular" class="required">Telefone/Celular</label>
+                        <label for="cpf" class="required">CPF / CNPJ</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefoneCelular" class="required">Telefone</label>
                         <input type="tel" id="telefoneCelular" name="telefoneCelular" placeholder="(87) 98765-4321" required>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="emailCliente" class="required">E-mail</label>
+                        <input type="email" id="emailCliente" name="emailCliente" placeholder="cliente@email.com" required>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="emailCliente" class="required">E-mail</label>
-                    <input type="email" id="emailCliente" name="emailCliente" placeholder="cliente@email.com" required>
+                
+                <div class="form-row">
+                    <div class="form-group form-row-full">
+                        <label for="endereco" class="required">Endereço</label>
+                        <input type="text" id="endereco" name="endereco" placeholder="Rua/Avenida, número" required>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="endereco" class="required">Endereço (Rua, número e complemento)</label>
-                    <input type="text" id="endereco" name="endereco" placeholder="Rua X, nº 123, Apto 456" required>
-                </div>
-
-                <div class="row-2">
+                
+                <div class="form-row">
                     <div class="form-group">
                         <label for="bairro" class="required">Bairro</label>
-                        <input type="text" id="bairro" name="bairro" placeholder="Centro, Bairro X, etc" required>
+                        <input type="text" id="bairro" name="bairro" placeholder="Seu bairro" required>
                     </div>
+                    
                     <div class="form-group">
                         <label for="cidade" class="required">Cidade</label>
-                        <input type="text" id="cidade" name="cidade" placeholder="Juazeiro, Pilar, Jaguarari, etc" required>
+                        <input type="text" id="cidade" name="cidade" placeholder="Sua cidade" required>
                     </div>
                 </div>
-            </div>
-
-            <!-- SEÇÃO 3: FOTO DO CLIENTE (NOVO) -->
-            <div class="section">
-                <h2 class="section-title">📸 Foto do Cliente (Opcional)</h2>
-
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📷</div>
-                    <div class="upload-text">Clique para selecionar ou arraste uma imagem</div>
-                    <input type="file" id="fotoCliente" name="fotoCliente" accept="image/*" class="file-input">
-                </div>
-                <div id="previewContainer"></div>
-                <div class="info-box">
-                    ℹ️ A foto será salva no Google Drive e um link será armazenado na planilha.
-                </div>
-            </div>
-
-            <!-- SEÇÃO 4: PLANOS -->
-            <div class="section">
-                <h2 class="section-title">📡 Plano Interessado</h2>
-
-                <div class="planos-container">
-                    <label class="plano-card" onclick="selecionarPlano(this)">
-                        <input type="radio" name="plano" value="500 Mega - R$ 79,90" required>
-                        <div class="plano-velocidade">500 Mega</div>
-                        <div class="plano-preco">R$ 79,90/mês</div>
-                    </label>
-                    <label class="plano-card" onclick="selecionarPlano(this)">
-                        <input type="radio" name="plano" value="600 Mega - R$ 89,90">
-                        <div class="plano-velocidade">600 Mega</div>
-                        <div class="plano-preco">R$ 89,90/mês</div>
-                    </label>
-                    <label class="plano-card" onclick="selecionarPlano(this)">
-                        <input type="radio" name="plano" value="800 Mega - R$ 99,90">
-                        <div class="plano-velocidade">800 Mega</div>
-                        <div class="plano-preco">R$ 99,90/mês</div>
-                    </label>
-                    <label class="plano-card" onclick="selecionarPlano(this)">
-                        <input type="radio" name="plano" value="1 Giga - R$ 159,90">
-                        <div class="plano-velocidade">1 Giga</div>
-                        <div class="plano-preco">R$ 159,90/mês</div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 5: ADICIONAIS -->
-            <div class="section">
-                <h2 class="section-title">➕ Serviços Adicionais (Opcional)</h2>
-
-                <div class="adicionais-container">
-                    <label class="adicional-item">
-                        <input type="checkbox" name="adicionais" value="Telefonia Fixa - R$ 9,90/mês">
-                        <span>📞 Telefonia Fixa<br><small>R$ 9,90/mês</small></span>
-                    </label>
-                    <label class="adicional-item">
-                        <input type="checkbox" name="adicionais" value="Wi-Fi Plus - R$ 21,90/mês">
-                        <span>📶 Wi-Fi Plus<br><small>R$ 21,90/mês</small></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 6: DATA DE VENCIMENTO -->
-            <div class="section">
-                <h2 class="section-title">📅 Data de Vencimento Preferida</h2>
-
-                <div class="vencimento-grid">
-                    <script>
-                        for(let i = 1; i <= 30; i++) {
-                            document.write(`<button type="button" class="dia-btn" data-dia="${i}" onclick="selecionarDia(this)">${i}</button>`);
-                        }
-                    </script>
-                </div>
-                <input type="hidden" id="dataVencimento" name="dataVencimento">
-            </div>
-
-            <!-- SEÇÃO 7: STATUS DO CADASTRO (NOVO) -->
-            <div class="section">
-                <h2 class="section-title">✅ Status do Cadastro</h2>
-
+                
+                <!-- Foto do Cliente -->
+                <div class="section-title">📸 Foto do Cliente (Opcional)</div>
+                
                 <div class="form-group">
-                    <label for="statusCadastro" class="required">Situação Atual</label>
-                    <select id="statusCadastro" name="statusCadastro" required>
-                        <option value="">-- Selecione um status --</option>
-                        <option value="Pendente">⏳ Pendente (Ainda não contatou)</option>
-                        <option value="Em Andamento">🔄 Em Andamento (Já conversou, aguarda resposta)</option>
-                        <option value="Concluído">✅ Concluído (Cliente contratou)</option>
-                    </select>
+                    <div class="file-input-wrapper">
+                        <label for="fotoCliente" class="file-input-label">
+                            📷 Clique ou arraste uma foto aqui
+                        </label>
+                        <input type="file" id="fotoCliente" name="fotoCliente" accept="image/*" onchange="mostrarNomeFoto()">
+                        <div class="file-name" id="fileName"></div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- BOTÕES -->
-            <div class="button-group">
-                <button type="button" class="btn-limpar" onclick="document.getElementById('formulario').reset(); document.getElementById('previewContainer').innerHTML = ''; limparPlanos(); limparDia();">🗑️ Limpar</button>
-                <button type="submit" class="btn-submit">✅ Enviar Indicação</button>
-            </div>
-        </form>
+                
+                <!-- Planos e Adicionais -->
+                <div class="section-title">💳 Plano de Interesse</div>
+                
+                <div class="form-group">
+                    <label class="required">Selecione o plano:</label>
+                    <div class="plan-group">
+                        <div class="plan-card">
+                            <input type="radio" id="plano1" name="plano" value="500 Mega - R$ 79,90" required>
+                            <label for="plano1">500 Mega</label>
+                            <div class="price">R$ 79,90</div>
+                        </div>
+                        <div class="plan-card">
+                            <input type="radio" id="plano2" name="plano" value="600 Mega - R$ 89,90">
+                            <label for="plano2">600 Mega</label>
+                            <div class="price">R$ 89,90</div>
+                        </div>
+                        <div class="plan-card">
+                            <input type="radio" id="plano3" name="plano" value="800 Mega - R$ 99,90">
+                            <label for="plano3">800 Mega</label>
+                            <div class="price">R$ 99,90</div>
+                        </div>
+                        <div class="plan-card">
+                            <input type="radio" id="plano4" name="plano" value="1 Giga - R$ 159,90">
+                            <label for="plano4">1 Giga</label>
+                            <div class="price">R$ 159,90</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Adicionais -->
+                <div class="form-group">
+                    <label>Adicionais (Selecione se necessário):</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="telefoniaFixa" name="adicionaisCheck" value="Telefonia Fixa R$ 9,90">
+                            <label for="telefoniaFixa">Telefonia Fixa - R$ 9,90</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="wifiPlus" name="adicionaisCheck" value="Wi-Fi Plus R$ 21,90">
+                            <label for="wifiPlus">Wi-Fi Plus - R$ 21,90</label>
+                        </div>
+                    </div>
+                    <input type="hidden" id="adicionais" name="adicionais">
+                </div>
+                
+                <!-- Data de Vencimento -->
+                <div class="section-title">📅 Data de Vencimento</div>
+                
+                <div class="form-group">
+                    <label for="dataVencimento" class="required">Dia do mês para vencimento (01-30)</label>
+                    <input type="number" id="dataVencimento" name="dataVencimento" min="1" max="30" placeholder="15" required>
+                </div>
+                
+                <!-- Observações -->
+                <div class="section-title">📝 Observações (Opcional)</div>
+                
+                <div class="form-group">
+                    <label for="observacoes">Adicione informações importantes</label>
+                    <textarea id="observacoes" name="observacoes" placeholder="Ex: Cliente em dúvida sobre velocidade, precisa de orçamento..."></textarea>
+                </div>
+                
+                <!-- Mensagens -->
+                <div id="message" class="message"></div>
+                
+                <!-- Botões -->
+                <div class="button-group">
+                    <button type="submit" class="btn-submit">✓ Enviar Indicação</button>
+                    <button type="reset" class="btn-reset">↻ Limpar</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <footer>
-        <p>Sistema de Indicações JR Telecom © 2026 | Versão 2.0 com Upload de Imagem</p>
-    </footer>
-</div>
-
-<script>
-    // URL DO GOOGLE APPS SCRIPT (NÃO MUDE ISTO!)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyi74OmF1GpZGT6iMsLNuwujjxKCERzucOOrZA4vf9rEXJF0aX35qyhVV19KrofaFHmxg/exec';
-
-    // FUNÇÕES DE INTERAÇÃO
-    function selecionarPlano(element) {
-        document.querySelectorAll('.plano-card').forEach(card => card.classList.remove('selected'));
-        element.classList.add('selected');
-        element.querySelector('input').checked = true;
-    }
-
-    function limparPlanos() {
-        document.querySelectorAll('.plano-card').forEach(card => card.classList.remove('selected'));
-    }
-
-    function selecionarDia(button) {
-        document.querySelectorAll('.dia-btn').forEach(btn => btn.classList.remove('selected'));
-        button.classList.add('selected');
-        document.getElementById('dataVencimento').value = button.dataset.dia;
-    }
-
-    function limparDia() {
-        document.querySelectorAll('.dia-btn').forEach(btn => btn.classList.remove('selected'));
-        document.getElementById('dataVencimento').value = '';
-    }
-
-    // UPLOAD DE IMAGEM
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fotoCliente');
-
-    uploadArea.addEventListener('click', () => fileInput.click());
-
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        fileInput.files = e.dataTransfer.files;
-        exibirPreview();
-    });
-
-    fileInput.addEventListener('change', exibirPreview);
-
-    function exibirPreview() {
-        const file = fileInput.files[0];
-        const container = document.getElementById('previewContainer');
+    
+    <script>
+        // URL do Google Apps Script (v2.2) - NOVA URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVAtq9dap0Av4RCCNhmR2n0Odnhe2M_siN9nrD8J69bnd9MrQLfm0SlZpQTbpa_OXQhQ/exec';
         
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                container.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            container.innerHTML = '';
+        // Mostrar nome do arquivo selecionado
+        function mostrarNomeFoto() {
+            const input = document.getElementById('fotoCliente');
+            const fileName = document.getElementById('fileName');
+            if (input.files && input.files[0]) {
+                fileName.textContent = '✓ ' + input.files[0].name + ' (' + (input.files[0].size / 1024).toFixed(2) + ' KB)';
+            }
         }
-    }
-
-    // CONVERTER IMAGEM PARA BASE64
-    function converterParaBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+        
+        // Capturar os adicionais selecionados
+        function atualizarAdicionais() {
+            const checkboxes = document.querySelectorAll('input[name="adicionaisCheck"]:checked');
+            const valores = Array.from(checkboxes).map(cb => cb.value).join(' | ');
+            document.getElementById('adicionais').value = valores || 'Nenhum';
+        }
+        
+        // Monitorar mudanças nos checkboxes
+        document.querySelectorAll('input[name="adicionaisCheck"]').forEach(checkbox => {
+            checkbox.addEventListener('change', atualizarAdicionais);
         });
-    }
-
-    // SUBMIT DO FORMULÁRIO
-    document.getElementById('formulario').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const mensagemDiv = document.getElementById('mensagem');
         
-        // Validar se plano foi selecionado
-        if (!document.querySelector('input[name="plano"]:checked')) {
-            mostrarMensagem('Por favor, selecione um plano!', 'erro');
-            return;
-        }
-
-        // Validar se dia foi selecionado
-        if (!document.getElementById('dataVencimento').value) {
-            mostrarMensagem('Por favor, selecione uma data de vencimento!', 'erro');
-            return;
-        }
-
-        mostrarMensagem('Enviando indicação...', 'carregando');
-
-        try {
-            let fotoBase64 = '';
-            const file = fileInput.files[0];
-            if (file) {
-                fotoBase64 = await converterParaBase64(file);
-            }
-
-            // Coletar adicionais
-            const adicionaisCheckboxes = document.querySelectorAll('input[name="adicionais"]:checked');
-            const adicionais = Array.from(adicionaisCheckboxes).map(cb => cb.value).join(' | ');
-
-            const data = {
-                dataEnvio: new Date().toLocaleString('pt-BR'),
-                nomeIndicador: document.getElementById('nomeIndicador').value,
-                telefoneIndicador: document.getElementById('telefoneIndicador').value,
-                unidade: document.getElementById('unidade').value,
-                nomeCliente: document.getElementById('nomeCliente').value,
-                cpf: document.getElementById('cpf').value,
-                telefoneCelular: document.getElementById('telefoneCelular').value,
-                emailCliente: document.getElementById('emailCliente').value,
-                endereco: document.getElementById('endereco').value,
-                bairro: document.getElementById('bairro').value,
-                cidade: document.getElementById('cidade').value,
-                plano: document.querySelector('input[name="plano"]:checked').value,
-                adicionais: adicionais || 'Nenhum',
-                dataVencimento: document.getElementById('dataVencimento').value,
-                statusCadastro: document.getElementById('statusCadastro').value,
-                fotoCliente: fotoBase64
-            };
-
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(data)
+        // Converter foto para Base64
+        function converterFotoParaBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
             });
-
-            const result = await response.json();
-
-            if (result.success) {
-                mostrarMensagem('✅ Indicação enviada com sucesso! Obrigado pela sua contribuição!', 'sucesso');
-                document.getElementById('formulario').reset();
-                document.getElementById('previewContainer').innerHTML = '';
-                limparPlanos();
-                limparDia();
-            } else {
-                mostrarMensagem('❌ Erro ao enviar. Tente novamente.', 'erro');
+        }
+        
+        // Enviar formulário
+        document.getElementById('indicacaoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                messageDiv.className = 'message loading';
+                messageDiv.innerHTML = '<div class="spinner"></div> Enviando indicação...';
+                messageDiv.style.display = 'block';
+                
+                // Preparar dados
+                let fotoBase64 = '';
+                const fileInput = document.getElementById('fotoCliente');
+                if (fileInput.files && fileInput.files[0]) {
+                    fotoBase64 = await converterFotoParaBase64(fileInput.files[0]);
+                }
+                
+                atualizarAdicionais();
+                
+                const formData = {
+                    dataEnvio: new Date().toLocaleString('pt-BR'),
+                    filial: document.getElementById('filial').value,
+                    nomeIndicador: document.getElementById('nomeIndicador').value,
+                    telefoneIndicador: document.getElementById('telefoneIndicador').value,
+                    nomeCliente: document.getElementById('nomeCliente').value,
+                    cpf: document.getElementById('cpf').value,
+                    telefoneCelular: document.getElementById('telefoneCelular').value,
+                    emailCliente: document.getElementById('emailCliente').value,
+                    endereco: document.getElementById('endereco').value,
+                    bairro: document.getElementById('bairro').value,
+                    cidade: document.getElementById('cidade').value,
+                    fotoCliente: fotoBase64,
+                    plano: document.querySelector('input[name="plano"]:checked').value,
+                    adicionais: document.getElementById('adicionais').value,
+                    dataVencimento: document.getElementById('dataVencimento').value,
+                    observacoes: document.getElementById('observacoes').value
+                };
+                
+                // Enviar para Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = `✓ Indicação enviada com sucesso para ${result.aba}! Parabéns pela oportunidade de comissão!`;
+                    document.getElementById('indicacaoForm').reset();
+                    document.getElementById('fileName').textContent = '';
+                } else {
+                    throw new Error(result.error || 'Erro ao enviar');
+                }
+                
+            } catch(error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '✗ Erro: ' + error.message;
+                console.error('Erro:', error);
             }
-        } catch (error) {
-            console.error('Erro:', error);
-            mostrarMensagem('❌ Erro na conexão. Verifique sua internet.', 'erro');
-        }
-    });
-
-    function mostrarMensagem(texto, tipo) {
-        const mensagemDiv = document.getElementById('mensagem');
-        mensagemDiv.textContent = texto;
-        mensagemDiv.className = 'mensagem ' + tipo;
-        mensagemDiv.style.display = 'block';
-
-        if (tipo !== 'carregando') {
-            setTimeout(() => {
-                mensagemDiv.style.display = 'none';
-            }, 5000);
-        }
-    }
-</script>
-
+        });
+    </script>
 </body>
 </html>
