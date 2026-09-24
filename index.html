@@ -213,7 +213,7 @@
                 </div>
             </div>
 
-            <!-- SEÇÃO 6: FOTOS MÚLTIPLAS - CORRIGIDO -->
+            <!-- SEÇÃO 6: FOTOS MÚLTIPLAS -->
             <div class="section">
                 <div class="section-title">📸 Fotos do Cliente (Até 10 fotos - Opcional)</div>
                 <div class="form-group">
@@ -243,7 +243,7 @@
 </div>
 
 <script>
-console.log('✅ Script iniciado');
+console.log('✅ Script iniciado - Versão DEBUG v3.3');
 
 // ===== GRADE DE DIAS =====
 const daysGrid = document.getElementById('daysGrid');
@@ -263,19 +263,26 @@ for (let i = 1; i <= 30; i++) {
     daysGrid.appendChild(button);
 }
 
-// ===== MÚLTIPLAS FOTOS - CORRIGIDO =====
+// ===== MÚLTIPLAS FOTOS - COM DEBUG DETALHADO =====
 const inputFotos = document.getElementById('inputFotos');
 const previewContainer = document.getElementById('previewContainer');
 const fotoContador = document.getElementById('fotoContador');
 let fotosArray = [];
 
-console.log('Input de fotos:', inputFotos);
+console.log('Input de fotos encontrado:', !!inputFotos);
 console.log('Atributo multiple:', inputFotos.getAttribute('multiple'));
 
 inputFotos.addEventListener('change', function(e) {
-    console.log('Evento change disparado');
+    console.log('==== EVENTO CHANGE DISPARADO ====');
     const files = e.target.files;
-    console.log('Arquivos selecionados:', files.length);
+    console.log('Tipo de files:', typeof files);
+    console.log('Files.length:', files.length);
+    console.log('Files é array:', Array.isArray(files));
+    
+    if (files.length === 0) {
+        console.log('⚠️ Nenhum arquivo selecionado');
+        return;
+    }
     
     if (files.length > 10) {
         alert('⚠️ Máximo de 10 fotos! Você selecionou ' + files.length);
@@ -286,17 +293,23 @@ inputFotos.addEventListener('change', function(e) {
     previewContainer.innerHTML = '';
     let fotosCarregadas = 0;
     
+    console.log('Iniciando carregamento de ' + files.length + ' arquivo(s)...');
+    
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log('Processando arquivo:', file.name);
+        console.log('Arquivo ' + (i + 1) + ':', file.name, '(' + (file.size / 1024).toFixed(2) + ' KB)');
         const reader = new FileReader();
         
         reader.onload = function(event) {
             const base64 = event.target.result;
+            console.log('Base64 gerado para ' + file.name + ':', base64.substring(0, 50) + '...');
+            console.log('Tamanho do base64:', base64.length, 'caracteres');
+            
             fotosArray.push(base64);
             fotosCarregadas++;
             
-            console.log('Foto ' + fotosCarregadas + ' carregada:', file.name);
+            console.log('✅ Foto ' + fotosCarregadas + ' carregada: ' + file.name);
+            console.log('Total de fotos no array agora:', fotosArray.length);
             
             // Criar preview
             const wrapper = document.createElement('div');
@@ -324,6 +337,10 @@ inputFotos.addEventListener('change', function(e) {
             atualizarContador();
         };
         
+        reader.onerror = function(error) {
+            console.error('❌ Erro ao ler arquivo ' + (i + 1) + ':', error);
+        };
+        
         reader.readAsDataURL(file);
     }
 });
@@ -331,14 +348,18 @@ inputFotos.addEventListener('change', function(e) {
 function atualizarContador() {
     const count = previewContainer.children.length;
     fotoContador.textContent = count > 0 ? `📷 ${count} foto(s) selecionada(s)` : '';
-    console.log('Contador atualizado:', count);
+    console.log('Contador atualizado:', count, 'fotos visíveis');
 }
 
 // ===== ENVIO =====
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7r5LLd1kM5V8fnghmjhCJy42jHpFBoTO6V4N1oiQJvMg9r2yv1yu33D56XZU0wsCqFg/exec';
 
+console.log('Script URL configurada:', SCRIPT_URL);
+
 document.getElementById('formAdesao').addEventListener('submit', async function(e) {
     e.preventDefault();
+    
+    console.log('\n========== INÍCIO DO ENVIO ==========');
     
     const loadingMsg = document.getElementById('loadingMsg');
     const errorMsg = document.getElementById('errorMsg');
@@ -385,9 +406,12 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
 
         const adicionaisStr = adicionaisList.length > 0 ? adicionaisList.join(' | ') : 'Nenhum';
 
-        console.log('===== ENVIANDO INDICAÇÃO =====');
+        console.log('===== PAYLOAD A ENVIAR =====');
         console.log('Cliente:', clienteNomeValue);
-        console.log('Fotos:', fotosArray.length);
+        console.log('Cidade:', clienteCidadeValue);
+        console.log('Fotos no array:', fotosArray.length);
+        console.log('Array de fotos é vazio?:', fotosArray.length === 0);
+        console.log('Primeiro 50 chars da 1ª foto:', fotosArray.length > 0 ? fotosArray[0].substring(0, 50) : 'N/A');
         console.log('================================');
 
         // PAYLOAD FINAL COM MÚLTIPLAS FOTOS
@@ -411,16 +435,26 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             totalFotos: fotosArray.length
         };
         
+        console.log('Payload construído');
+        console.log('Total de chaves:', Object.keys(payload).length);
+        console.log('Tamanho aproximado:', (JSON.stringify(payload).length / 1024 / 1024).toFixed(2), 'MB');
+        
+        console.log('Enviando para:', SCRIPT_URL);
+        
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify(payload)
         });
         
+        console.log('Resposta recebida, status:', response.status);
+        
         const result = await response.json();
+        
+        console.log('Resultado JSON:', result);
         
         if (result.success) {
             loadingMsg.classList.remove('show');
-            successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}! (${fotosArray.length} foto(s))`;
+            successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}! (${result.fotosSalvas || fotosArray.length} foto(s))`;
             successMsg.classList.add('show');
             document.getElementById('formAdesao').reset();
             
@@ -438,18 +472,21 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
                 submitBtn.disabled = false;
             }, 3000);
         } else {
-            throw new Error(result.error || 'Erro ao enviar');
+            throw new Error(result.error || 'Erro desconhecido ao enviar');
         }
     } catch (erro) {
+        console.error('❌ ERRO:', erro);
+        console.error('Stack:', erro.stack);
         loadingMsg.classList.remove('show');
         errorMsg.textContent = '❌ Erro: ' + erro.message;
         errorMsg.classList.add('show');
         submitBtn.disabled = false;
-        console.error('Erro:', erro);
     }
+    
+    console.log('========== FIM DO ENVIO ==========\n');
 });
 
-console.log('✅ Formulário pronto para múltiplas fotos!');
+console.log('✅ Formulário v3.3 DEBUG pronto para uso!');
 </script>
 
 </body>
