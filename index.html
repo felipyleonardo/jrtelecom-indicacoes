@@ -10,6 +10,7 @@
         .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 51, 153, 0.1); overflow: hidden; }
         .header { background: linear-gradient(135deg, #0033cc 0%, #003399 100%); color: white; padding: 30px 20px; text-align: center; }
         .header h1 { font-size: 24px; margin-bottom: 5px; font-weight: 700; }
+        .debug-box { background: #fff3cd; border-left: 4px solid #ff9800; padding: 12px; margin-bottom: 15px; border-radius: 4px; font-size: 11px; font-family: monospace; color: #333; }
         .form-content { padding: 25px; }
         .section { margin-bottom: 25px; }
         .section-title { background: #0033cc; padding: 10px 15px; border-radius: 6px; font-weight: 600; color: white; margin-bottom: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -50,11 +51,6 @@
         .day-button { padding: 10px; border: 2px solid #ddd; border-radius: 6px; background: white; cursor: pointer; font-weight: 600; color: #333; transition: all 0.3s; font-size: 13px; }
         .day-button:hover { border-color: #0033cc; background: #f8faff; }
         .day-button.selected { background: #0033cc; color: white; border-color: #0033cc; }
-        .file-input-wrapper { position: relative; display: inline-block; width: 100%; }
-        .file-input-wrapper input[type="file"] { display: none; }
-        .file-input-label { display: block; padding: 10px; background: #f8faff; border: 2px dashed #0033cc; border-radius: 6px; text-align: center; cursor: pointer; font-weight: 600; color: #0033cc; transition: all 0.3s; }
-        .file-input-label:hover { background: #e3f2fd; }
-        .file-name { font-size: 12px; color: #666; margin-top: 5px; }
         .preview-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
         .preview-foto { width: 100%; height: 100px; border-radius: 6px; object-fit: cover; border: 2px solid #ddd; position: relative; }
         .preview-wrapper { position: relative; }
@@ -67,9 +63,16 @@
 <div class="container">
     <div class="header">
         <h1>📱 Indicações JR Telecom</h1>
+        <p style="font-size: 12px; margin-top: 10px;">🔍 v3.4 SUPER DEBUG</p>
     </div>
 
     <div class="form-content">
+        <div class="debug-box" id="debugBox">
+            <strong>🔍 DEBUG Console (abra F12 → Console para ver mais detalhes)</strong><br>
+            Fotos selecionadas: <span id="debugFotos">0</span><br>
+            Status: <span id="debugStatus">Aguardando...</span>
+        </div>
+
         <div id="successMsg" class="success-message">✅ Indicação enviada com sucesso!</div>
         <div id="errorMsg" class="error-message">❌ Erro ao enviar indicação</div>
         <div id="loadingMsg" class="loading-message">⏳ Enviando indicação...</div>
@@ -243,7 +246,14 @@
 </div>
 
 <script>
-console.log('✅ Script iniciado - Versão DEBUG v3.3');
+console.log('═══════════════════════════════════════════════════════════════════════════');
+console.log('✅ v3.4 SUPER DEBUG INICIADO');
+console.log('═══════════════════════════════════════════════════════════════════════════');
+
+const debugBox = document.getElementById('debugBox');
+function updateDebug(status) {
+    document.getElementById('debugStatus').textContent = status;
+}
 
 // ===== GRADE DE DIAS =====
 const daysGrid = document.getElementById('daysGrid');
@@ -263,24 +273,31 @@ for (let i = 1; i <= 30; i++) {
     daysGrid.appendChild(button);
 }
 
-// ===== MÚLTIPLAS FOTOS - COM DEBUG DETALHADO =====
+// ===== MÚLTIPLAS FOTOS - SUPER DEBUG =====
 const inputFotos = document.getElementById('inputFotos');
 const previewContainer = document.getElementById('previewContainer');
 const fotoContador = document.getElementById('fotoContador');
 let fotosArray = [];
 
-console.log('Input de fotos encontrado:', !!inputFotos);
+console.log('\n🔍 INPUT DE FOTOS DETECTADO');
+console.log('Elemento:', inputFotos);
 console.log('Atributo multiple:', inputFotos.getAttribute('multiple'));
+console.log('Type:', inputFotos.type);
 
 inputFotos.addEventListener('change', function(e) {
-    console.log('==== EVENTO CHANGE DISPARADO ====');
+    console.log('\n🔥 EVENTO CHANGE DISPARADO');
+    console.log('Event.target:', e.target);
+    console.log('Event.target.files:', e.target.files);
+    
     const files = e.target.files;
-    console.log('Tipo de files:', typeof files);
     console.log('Files.length:', files.length);
-    console.log('Files é array:', Array.isArray(files));
+    console.log('Files[0]:', files.length > 0 ? files[0] : 'NADA');
+    
+    document.getElementById('debugFotos').textContent = files.length;
+    updateDebug(`${files.length} fotos selecionadas`);
     
     if (files.length === 0) {
-        console.log('⚠️ Nenhum arquivo selecionado');
+        console.log('⚠️ NENHUMA FOTO SELECIONADA!');
         return;
     }
     
@@ -293,52 +310,53 @@ inputFotos.addEventListener('change', function(e) {
     previewContainer.innerHTML = '';
     let fotosCarregadas = 0;
     
-    console.log('Iniciando carregamento de ' + files.length + ' arquivo(s)...');
+    console.log(`\n📷 INICIANDO CARREGAMENTO DE ${files.length} FOTOS`);
     
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log('Arquivo ' + (i + 1) + ':', file.name, '(' + (file.size / 1024).toFixed(2) + ' KB)');
+        console.log(`\n📄 Arquivo ${i + 1}: ${file.name}`);
+        console.log(`   - Type: ${file.type}`);
+        console.log(`   - Size: ${(file.size / 1024).toFixed(2)} KB`);
+        
         const reader = new FileReader();
+        
+        reader.onloadstart = function() {
+            console.log(`   ⏳ Começando a ler... ${file.name}`);
+        };
+        
+        reader.onprogress = function(e) {
+            if (e.lengthComputable) {
+                const progress = ((e.loaded / e.total) * 100).toFixed(1);
+                console.log(`   📊 Progresso: ${progress}%`);
+            }
+        };
         
         reader.onload = function(event) {
             const base64 = event.target.result;
-            console.log('Base64 gerado para ' + file.name + ':', base64.substring(0, 50) + '...');
-            console.log('Tamanho do base64:', base64.length, 'caracteres');
+            console.log(`   ✅ BASE64 GERADO para ${file.name}`);
+            console.log(`   - Primeiros 50 chars: ${base64.substring(0, 50)}...`);
+            console.log(`   - Tamanho total: ${base64.length} caracteres`);
             
             fotosArray.push(base64);
             fotosCarregadas++;
             
-            console.log('✅ Foto ' + fotosCarregadas + ' carregada: ' + file.name);
-            console.log('Total de fotos no array agora:', fotosArray.length);
+            console.log(`   ✅ Foto ${fotosCarregadas} adicionada ao array`);
+            console.log(`   📊 Array total agora tem: ${fotosArray.length} fotos`);
             
-            // Criar preview
+            // Preview
             const wrapper = document.createElement('div');
             wrapper.className = 'preview-wrapper';
-            
             const img = document.createElement('img');
             img.className = 'preview-foto';
             img.src = base64;
-            
-            const btnRemove = document.createElement('button');
-            btnRemove.className = 'btn-remove-foto';
-            btnRemove.textContent = '×';
-            btnRemove.type = 'button';
-            btnRemove.addEventListener('click', (e) => {
-                e.preventDefault();
-                wrapper.remove();
-                fotosArray = fotosArray.filter((_, idx) => idx !== fotosArray.indexOf(base64));
-                atualizarContador();
-            });
-            
             wrapper.appendChild(img);
-            wrapper.appendChild(btnRemove);
             previewContainer.appendChild(wrapper);
             
             atualizarContador();
         };
         
         reader.onerror = function(error) {
-            console.error('❌ Erro ao ler arquivo ' + (i + 1) + ':', error);
+            console.error(`   ❌ ERRO ao ler arquivo: ${error}`);
         };
         
         reader.readAsDataURL(file);
@@ -348,18 +366,21 @@ inputFotos.addEventListener('change', function(e) {
 function atualizarContador() {
     const count = previewContainer.children.length;
     fotoContador.textContent = count > 0 ? `📷 ${count} foto(s) selecionada(s)` : '';
-    console.log('Contador atualizado:', count, 'fotos visíveis');
+    console.log(`📊 Contador visual atualizado: ${count} fotos visíveis`);
 }
 
 // ===== ENVIO =====
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7r5LLd1kM5V8fnghmjhCJy42jHpFBoTO6V4N1oiQJvMg9r2yv1yu33D56XZU0wsCqFg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFYNI2dsEblHsRNLMTjyFmsL75bY_oXBrFHn16c0hKOqBwcpeHAQmhUdt3Z0vjaxC5yw/exec';
 
-console.log('Script URL configurada:', SCRIPT_URL);
+console.log('\n🔗 SCRIPT URL CONFIGURADA:');
+console.log(SCRIPT_URL);
 
 document.getElementById('formAdesao').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    console.log('\n========== INÍCIO DO ENVIO ==========');
+    console.log('\n═══════════════════════════════════════════════════════════════════════════');
+    console.log('🚀 INÍCIO DO ENVIO DA INDICAÇÃO');
+    console.log('═══════════════════════════════════════════════════════════════════════════');
     
     const loadingMsg = document.getElementById('loadingMsg');
     const errorMsg = document.getElementById('errorMsg');
@@ -377,6 +398,7 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
     }
     
     loadingMsg.classList.add('show');
+    updateDebug('Enviando...');
     submitBtn.disabled = true;
     
     try {
@@ -389,7 +411,7 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             adicionaisList.push(document.getElementById('adicional2').value);
         }
         
-        // CAPTURA EXATA DOS CAMPOS
+        // CAPTURA DOS CAMPOS
         const suaFilialValue = document.getElementById('suaFilial').value;
         const seuNomeValue = document.getElementById('seuNome').value;
         const seuTelefoneValue = document.getElementById('seuTelefone').value;
@@ -406,15 +428,18 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
 
         const adicionaisStr = adicionaisList.length > 0 ? adicionaisList.join(' | ') : 'Nenhum';
 
-        console.log('===== PAYLOAD A ENVIAR =====');
-        console.log('Cliente:', clienteNomeValue);
-        console.log('Cidade:', clienteCidadeValue);
-        console.log('Fotos no array:', fotosArray.length);
-        console.log('Array de fotos é vazio?:', fotosArray.length === 0);
-        console.log('Primeiro 50 chars da 1ª foto:', fotosArray.length > 0 ? fotosArray[0].substring(0, 50) : 'N/A');
-        console.log('================================');
+        console.log('\n📋 DADOS DO FORMULÁRIO CAPTURADOS:');
+        console.log(`   Filial: ${suaFilialValue}`);
+        console.log(`   Cliente: ${clienteNomeValue}`);
+        console.log(`   Cidade: ${clienteCidadeValue}`);
+        console.log(`   Plano: ${planoValue}`);
 
-        // PAYLOAD FINAL COM MÚLTIPLAS FOTOS
+        console.log('\n🖼️  STATUS DAS FOTOS NO FORMULÁRIO:');
+        console.log(`   Fotos no inputFotos.files: ${inputFotos.files.length}`);
+        console.log(`   Fotos no array fotosArray: ${fotosArray.length}`);
+        console.log(`   Fotos visíveis (preview): ${previewContainer.children.length}`);
+
+        // PAYLOAD FINAL
         const payload = {
             dataEnvio: new Date().toLocaleString('pt-BR'),
             unidade: suaFilialValue,
@@ -435,32 +460,39 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             totalFotos: fotosArray.length
         };
         
-        console.log('Payload construído');
-        console.log('Total de chaves:', Object.keys(payload).length);
-        console.log('Tamanho aproximado:', (JSON.stringify(payload).length / 1024 / 1024).toFixed(2), 'MB');
+        console.log('\n📦 PAYLOAD CONSTRUÍDO:');
+        console.log(`   Total de chaves: ${Object.keys(payload).length}`);
+        console.log(`   Fotos no payload.fotos: ${payload.fotos.length}`);
+        console.log(`   Tamanho do JSON: ${(JSON.stringify(payload).length / 1024 / 1024).toFixed(2)} MB`);
         
-        console.log('Enviando para:', SCRIPT_URL);
+        console.log('\n🌐 ENVIANDO PARA SCRIPT...');
         
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify(payload)
         });
         
-        console.log('Resposta recebida, status:', response.status);
+        console.log(`\n📥 RESPOSTA RECEBIDA:`);
+        console.log(`   Status HTTP: ${response.status}`);
+        console.log(`   OK: ${response.ok}`);
         
         const result = await response.json();
         
-        console.log('Resultado JSON:', result);
+        console.log(`\n✉️  RESULTADO JSON:`);
+        console.log(result);
         
         if (result.success) {
-            loadingMsg.classList.remove('show');
-            successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}! (${result.fotosSalvas || fotosArray.length} foto(s))`;
-            successMsg.classList.add('show');
-            document.getElementById('formAdesao').reset();
+            console.log('\n✅ SUCESSO!');
+            console.log(`   ABA: ${result.aba}`);
+            console.log(`   Fotos salvas: ${result.fotosSalvas}`);
             
-            document.querySelectorAll('.day-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
+            loadingMsg.classList.remove('show');
+            successMsg.textContent = `✅ Indicação de ${clienteNomeValue} enviada com sucesso para ${result.aba}! (${result.fotosSalvas} foto(s))`;
+            successMsg.classList.add('show');
+            updateDebug('✅ Sucesso!');
+            
+            document.getElementById('formAdesao').reset();
+            document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('selected'));
             vencimentoDia.value = '';
             previewContainer.innerHTML = '';
             fotoContador.textContent = '';
@@ -470,23 +502,32 @@ document.getElementById('formAdesao').addEventListener('submit', async function(
             setTimeout(() => {
                 successMsg.classList.remove('show');
                 submitBtn.disabled = false;
+                updateDebug('Aguardando...');
             }, 3000);
         } else {
+            console.log('\n❌ ERRO NO RESULTADO:');
+            console.log(`   Mensagem: ${result.error}`);
             throw new Error(result.error || 'Erro desconhecido ao enviar');
         }
     } catch (erro) {
-        console.error('❌ ERRO:', erro);
-        console.error('Stack:', erro.stack);
+        console.error('\n❌ EXCEÇÃO CAPTURADA:');
+        console.error(`   Mensagem: ${erro.message}`);
+        console.error(`   Stack: ${erro.stack}`);
+        
         loadingMsg.classList.remove('show');
         errorMsg.textContent = '❌ Erro: ' + erro.message;
         errorMsg.classList.add('show');
+        updateDebug('❌ Erro!');
         submitBtn.disabled = false;
     }
     
-    console.log('========== FIM DO ENVIO ==========\n');
+    console.log('\n═══════════════════════════════════════════════════════════════════════════');
+    console.log('🏁 FIM DO ENVIO');
+    console.log('═══════════════════════════════════════════════════════════════════════════\n');
 });
 
-console.log('✅ Formulário v3.3 DEBUG pronto para uso!');
+console.log('\n✅ v3.4 PRONTO PARA USAR');
+console.log('═══════════════════════════════════════════════════════════════════════════\n');
 </script>
 
 </body>
